@@ -1,5 +1,6 @@
 package ru.shift.task.api.dto;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -8,6 +9,6 @@ import java.time.LocalDateTime;
 public record TransactionCreateRequest(
         Long sellerId,
         Long amount,
-        String paymentType,
+        @Pattern(regexp = "^(CASH|CARD|TRANSFER)$", message = "Payment type must be one of: CASH, CARD, TRANSFER") String paymentType,
         LocalDateTime transactionDate) {
 }
