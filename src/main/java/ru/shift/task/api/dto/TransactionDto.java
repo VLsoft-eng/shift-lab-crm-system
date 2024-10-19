@@ -10,5 +10,5 @@ public record TransactionDto(
         Long sellerId,
         Long amount,
         String paymentType,
-        LocalDateTime paymentDate) {
+        LocalDateTime transactionDate) {
 }
