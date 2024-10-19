@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import ru.shift.task.api.dto.ErrorResponse;
 import ru.shift.task.domain.exception.SellerNotFoundException;
+import ru.shift.task.domain.exception.TransactionNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -68,6 +69,20 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
                 "Seller Not Found",
+                ex.getMessage(),
+                Map.of(),
+                request.getDescription(false)
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(TransactionNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleTransactionNotFoundException(TransactionNotFoundException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Transaction not found",
                 ex.getMessage(),
                 Map.of(),
                 request.getDescription(false)
