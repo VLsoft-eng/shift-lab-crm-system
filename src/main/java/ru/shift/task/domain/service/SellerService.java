@@ -2,9 +2,7 @@ package ru.shift.task.domain.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.shift.task.api.dto.SellerCreateRequest;
-import ru.shift.task.api.dto.SellerDto;
-import ru.shift.task.api.dto.SellerPatchRequest;
+import ru.shift.task.api.dto.*;
 import ru.shift.task.data.entity.Seller;
 import ru.shift.task.data.repository.SellerRepository;
 import ru.shift.task.domain.exception.SellerNotFoundException;
@@ -39,17 +37,20 @@ public class SellerService {
         return sellerMapper.toDto(seller);
     }
 
-    public void updateSeller(SellerPatchRequest seller, Long id) {
+    public void updateSellerName(SellerNamePatchRequest seller, Long id) {
         Seller existSeller = sellerRepository.findById(id)
                 .orElseThrow(() -> new SellerNotFoundException(id));
 
-        if (!seller.name().isEmpty()) {
-            existSeller.setName(seller.name());
-        }
+        existSeller.setName(seller.name());
 
-        if (!seller.contactInfo().isEmpty()) {
-            existSeller.setContactInfo(seller.contactInfo());
-        }
+        sellerRepository.save(existSeller);
+    }
+
+    public void updateSellerContactInfo(SellerContactPatchRequest seller, Long id) {
+        Seller existSeller = sellerRepository.findById(id)
+                .orElseThrow(() -> new SellerNotFoundException(id));
+
+        existSeller.setContactInfo(seller.contactInfo());
 
         sellerRepository.save(existSeller);
     }
