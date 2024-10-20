@@ -7,6 +7,7 @@ import ru.shift.task.data.entity.Seller;
 import ru.shift.task.data.repository.AnalyticsRepository;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -16,16 +17,19 @@ public class AnalyticRepositoryImpl implements AnalyticsRepository {
     EntityManager entityManager;
 
     @Override
-    public List<Seller> findSellersWithSumLess(Long amountThreshold) {
+    public List<Seller> findSellersWithSumLess(Long amountThreshold, LocalDateTime start, LocalDateTime end) {
         List<Seller> sellers = entityManager.createQuery(
                         "SELECT t.seller FROM Transaction t " +
+                                "WHERE t.transactionDate BETWEEN :start AND :end " +
                                 "GROUP BY t.seller " +
                                 "HAVING SUM(t.amount) < :amountThreshold", Seller.class)
                 .setParameter("amountThreshold", amountThreshold)
+                .setParameter("start", start)
+                .setParameter("end", end)
                 .getResultList();
 
         if (sellers.isEmpty()) {
-            return null;
+            return Collections.emptyList();
         }
 
         return sellers;

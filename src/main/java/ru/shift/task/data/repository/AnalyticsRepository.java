@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface AnalyticsRepository {
-    List<Seller> findSellersWithSumLess(Long amountThreshold);
+    List<Seller> findSellersWithSumLess(Long amountThreshold, LocalDateTime start, LocalDateTime end);
 
     Seller findBestSellerInPeriod(LocalDateTime startDate, LocalDateTime endDate);
 
