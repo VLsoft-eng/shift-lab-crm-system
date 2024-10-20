@@ -104,9 +104,10 @@ public class AnalyticService {
             throw new TransactionNotFoundException("Not found transactions for current seller.");
         }
 
-        transactions.sort(Comparator.comparing(Transaction::getTransactionDate));
+        List<Transaction> mutableTransactions = new ArrayList<>(transactions);
+        mutableTransactions.sort(Comparator.comparing(Transaction::getTransactionDate));
 
-        Map<LocalDate, Long> dailyTransactionCounts = transactions.stream()
+        Map<LocalDate, Long> dailyTransactionCounts = mutableTransactions.stream()
                 .collect(Collectors.groupingBy(
                         transaction -> transaction.getTransactionDate().toLocalDate(),
                         Collectors.counting()
