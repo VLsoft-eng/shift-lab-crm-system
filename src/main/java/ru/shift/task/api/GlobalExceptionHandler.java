@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import ru.shift.task.api.dto.ErrorResponse;
+import ru.shift.task.domain.exception.InvalidPeriodException;
+import ru.shift.task.domain.exception.PeriodNotFoundException;
 import ru.shift.task.domain.exception.SellerNotFoundException;
 import ru.shift.task.domain.exception.TransactionNotFoundException;
 
@@ -88,6 +90,32 @@ public class GlobalExceptionHandler {
                 request.getDescription(false)
         );
 
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidPeriodException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPeriodException(InvalidPeriodException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Period validation error",
+                ex.getMessage(),
+                Map.of(),
+                request.getDescription(false)
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(PeriodNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handlePeriodNotFoundException(PeriodNotFoundException ex, WebRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Period not found",
+                ex.getMessage(),
+                Map.of(),
+                request.getDescription(false)
+        );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }
