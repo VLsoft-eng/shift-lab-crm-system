@@ -138,7 +138,7 @@
 - **Ответ:**
 ```json
 {
-  "transactions": [
+ [
     {
       "id": 1,
       "sellerId": 1,
