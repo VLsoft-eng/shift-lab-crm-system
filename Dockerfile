@@ -1,13 +1,9 @@
 FROM gradle:8.12-jdk21 AS build
-
-workdir /app
-
+WORKDIR /app
 COPY . .
-
 RUN gradle build --no-daemon
 
 FROM openjdk:21-jdk-slim
-
 WORKDIR /app
 ENV APP_VERSION="1.5.2"
 LABEL maintainer="vl_softeng"
